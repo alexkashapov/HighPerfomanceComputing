@@ -6,18 +6,18 @@
 
 /*
 *********************************************************************
-function name: gpu_matrix_mult
-description: dot product of two matrix (not only square)
-parameters: 
-            &a GPU device pointer to a m X n matrix (A)
-            &b GPU device pointer to a n X k matrix (B)
-            &c GPU device output purpose pointer to a m X k matrix (C) 
-            to store the result
-Note:
-    grid and block should be configured as:
+имя функции: gpu_matrix_mult
+описание: поточечное вычисление перемножения 2 матриц(не только квадратных)
+параметры: 
+            &a указатель на GPU к матрице A [m x n]
+            &b указатель на GPU к матрице B [n x k]
+            &c указатель на результирующую матрицу C[m x k] 
+            для сохранения результата
+Заметка:
+    Сетка и блок должны быть сконфигурированы так:
         dim3 dimGrid((k + BLOCK_SIZE - 1) / BLOCK_SIZE, (m + BLOCK_SIZE - 1) / BLOCK_SIZE);
         dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
-    further sppedup can be obtained by using shared memory to decrease global memory access times
+        ускорение может быть достигнуто благодаря использованию разделяемой памяти
 return: none
 *********************************************************************
 */
@@ -38,15 +38,15 @@ __global__ void gpu_matrix_mult(int *a,int *b, int *c, int m, int n, int k)
 
 /*
 *********************************************************************
-function name: gpu_square_matrix_mult
-description: dot product of two matrix (not only square) in GPU
-parameters: 
-            &a GPU device pointer to a n X n matrix (A)
-            &b GPU device pointer to a n X n matrix (B)
-            &c GPU device output purpose pointer to a n X n matrix (C) 
-            to store the result
-Note:
-    grid and block should be configured as:
+название функции: gpu_square_matrix_mult
+описание: поточечное произведение квадратных матриц
+параметры: 
+            &a указатель на GPU к матрице A [m x n]
+            &b указатель на GPU к матрице B [n x k]
+            &c указатель на результирующую матрицу C[m x k] 
+            для сохранения результата
+Заметка:
+    Сетка и блок должны быть сконфигурированы так:
         dim3 dim_grid((n - 1) / BLOCK_SIZE + 1, (n - 1) / BLOCK_SIZE + 1, 1);
         dim3 dim_block(BLOCK_SIZE, BLOCK_SIZE, 1);
 return: none
@@ -100,14 +100,14 @@ __global__ void gpu_square_matrix_mult(int *d_a, int *d_b, int *d_result, int n)
 
 /*
 *********************************************************************
-function name: gpu_matrix_transpose
-description: matrix transpose
-parameters: 
-            &mat_in GPU device pointer to a rows X cols matrix
-            &mat_out GPU device output purpose pointer to a cols X rows matrix 
-            to store the result
-Note:
-    grid and block should be configured as:
+название функции: gpu_matrix_transpose
+описание: matrix transpose
+параметры: 
+            &mat_in Указатель на матрицу rows X cols размерностью на GPU
+            &mat_out Указатель на результат матрицу cols X rows на GPU
+            для сохранения результата
+Заметка:
+    Сетка и блок сконфигурированы так:
         dim3 dim_grid((n - 1) / BLOCK_SIZE + 1, (n - 1) / BLOCK_SIZE + 1, 1);
         dim3 dim_block(BLOCK_SIZE, BLOCK_SIZE, 1);
 return: none
@@ -127,14 +127,12 @@ __global__ void gpu_matrix_transpose(int* mat_in, int* mat_out, unsigned int row
 }
 /*
 *********************************************************************
-function name: cpu_matrix_mult
-description: dot product of two matrix (not only square) in CPU, 
-             for validating GPU results
-parameters: 
-            &a CPU host pointer to a m X n matrix (A)
-            &b CPU host pointer to a n X k matrix (B)
-            &c CPU host output purpose pointer to a m X k matrix (C) 
-            to store the result
+название функции: cpu_matrix_mult
+описание: произведение матриц на CPU
+параметры: 
+            &a указатель на матрицу А на CPU
+            &b указатель на матрицу B на CPU
+            &c указатель на результат(матрицу С) на CPU
 return: none
 *********************************************************************
 */
